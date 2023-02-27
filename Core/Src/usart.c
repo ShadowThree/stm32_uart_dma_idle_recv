@@ -55,7 +55,7 @@ void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
   /* USER CODE END USART1_Init 2 */
 
 }
@@ -107,7 +107,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     PA9     ------> USART1_TX
     PA10     ------> USART1_RX
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+    GPIO_InitStruct.Pin = UART1_Tx_CMD_J2_Pin|UART1_Rx_CMD_J2_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -151,19 +151,19 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     PC10     ------> USART3_TX
     PC11     ------> USART3_RX
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_10;
+    GPIO_InitStruct.Pin = UART3_Tx_LOG_J1_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    HAL_GPIO_Init(UART3_Tx_LOG_J1_GPIO_Port, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_11;
+    GPIO_InitStruct.Pin = UART3_Rx_LOG_J1_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    HAL_GPIO_Init(UART3_Rx_LOG_J1_GPIO_Port, &GPIO_InitStruct);
 
     /* USART3 interrupt Init */
     HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
@@ -189,7 +189,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     PA9     ------> USART1_TX
     PA10     ------> USART1_RX
     */
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9|GPIO_PIN_10);
+    HAL_GPIO_DeInit(GPIOA, UART1_Tx_CMD_J2_Pin|UART1_Rx_CMD_J2_Pin);
 
     /* USART1 DMA DeInit */
     HAL_DMA_DeInit(uartHandle->hdmarx);
@@ -212,7 +212,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     PC10     ------> USART3_TX
     PC11     ------> USART3_RX
     */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_11);
+    HAL_GPIO_DeInit(GPIOC, UART3_Tx_LOG_J1_Pin|UART3_Rx_LOG_J1_Pin);
 
     /* USART3 interrupt Deinit */
     HAL_NVIC_DisableIRQ(USART3_IRQn);
@@ -223,5 +223,11 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
+volatile int uart1_recv_len = 0;
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+    if(huart == &huart1) {
+        uart1_recv_len = Size;
+    }
+}
 /* USER CODE END 1 */
