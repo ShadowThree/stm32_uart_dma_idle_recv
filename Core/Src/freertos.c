@@ -91,12 +91,6 @@ __weak void vApplicationTickHook( void )
    added here, but the tick hook is called from an interrupt context, so
    code must not attempt to block, and only the interrupt safe FreeRTOS API
    functions can be used (those that end in FromISR()). */
-   static uint32_t i = 0;
-   if(i++ == 500) {
-       i = 0;
-       HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-       LOG_VBS("LED1 toggle...\r\n");
-   }
 }
 /* USER CODE END 3 */
 

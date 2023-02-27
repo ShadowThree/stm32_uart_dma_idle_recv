@@ -30,21 +30,22 @@
             return;
         }
         
-        while(LOG_UART->gState == HAL_UART_STATE_BUSY_TX);              // wait last send to finish.
-        //while(HAL_UART_GetState(LOG_UART) == HAL_UART_STATE_BUSY_TX);   // same as last line
-        
         int ret;
         va_list ParamList;
 
         va_start(ParamList, fmt);
         ret = vsprintf((char*)logBuf, fmt, ParamList);
         va_end(ParamList);
-        //HAL_UART_Transmit(LOG_UART, logBuf, strlen((const char*)logBuf), 1000);   // send in block mode
-        HAL_UART_Transmit_IT(LOG_UART, logBuf, strlen((const char*)logBuf));        // send in interrupt mode
         
-        if(ret < 0) {
-            // TODO:
+        if(ret < 0) {   // vsprintf() error
+            return;
         }
+        
+        //HAL_UART_Transmit(LOG_UART, logBuf, strlen((const char*)logBuf), 1000);   // send in block mode
+        HAL_UART_Transmit_IT(LOG_UART, logBuf, strlen((const char*)logBuf));        // send in interrupt mode, maybe can change to DMA mode
+        
+        while(LOG_UART->gState == HAL_UART_STATE_BUSY_TX);              // wait to send finish.
+        //while(HAL_UART_GetState(LOG_UART) == HAL_UART_STATE_BUSY_TX);   // same as last line
     }
 #elif LOG_ENABLE && LOG_BY_RTT
     

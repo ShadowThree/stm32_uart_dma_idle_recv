@@ -35,7 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define CMD_BUF_LEN     32
+#define CMD_BUF_LEN     (8)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -97,9 +97,8 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART1_UART_Init();
-  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_DMA(&huart1, cmd_buf, CMD_BUF_LEN);
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, cmd_buf, CMD_BUF_LEN);      // no need to enable the idle interrupt
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -168,7 +167,28 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void vApplicationTickHook( void )
+{
+   static uint32_t i = 0;
+    
+   if(i % 500 == 0) {
+       HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+#if LOG_BY_RTT
+       //LOG_VBS("LED1 toggle...\r\n");
+#endif
+   }
+   
+#if LOG_BY_RTT
+   if(i % 5000 == 0) {
+       LOG_VBS("\r\n");
+       LOG_VBS("MCU tasks state:\r\n");
+   }
+#endif
+   
+   if(++i == 1000000) {
+       i = 0;
+   }
+}
 /* USER CODE END 4 */
 
 /**

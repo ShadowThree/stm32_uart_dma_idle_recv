@@ -42,7 +42,7 @@ extern "C" {
 #define LOG_ENABLE          1
 #define LOG_BY_RTT          1
 #define LOG_BY_UART         (!LOG_BY_RTT)
-#define LOG_LEVEL           5       // the priority less than or queal to LOG_LEVEL will be output
+#define LOG_LEVEL           6       // the priority less than or queal to LOG_LEVEL will be output
 #define LOG_COLOR_ENABLE    1
 
 #if LOG_ENABLE
