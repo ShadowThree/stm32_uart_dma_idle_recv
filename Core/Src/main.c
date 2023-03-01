@@ -35,7 +35,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define CMD_BUF_LEN     (8)
+#define CMD_BUF_LEN         (256)
+#define PRINT_TASK_STATE    (1)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,6 +48,8 @@
 
 /* USER CODE BEGIN PV */
 uint8_t cmd_buf[CMD_BUF_LEN] = {0};
+volatile unsigned long runTimeCounterValue = 0;
+volatile uint8_t printStateFlag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -97,6 +100,7 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART1_UART_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_UARTEx_ReceiveToIdle_DMA(&huart1, cmd_buf, CMD_BUF_LEN);      // no need to enable the idle interrupt
   /* USER CODE END 2 */
@@ -169,25 +173,63 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void vApplicationTickHook( void )
 {
-   static uint32_t i = 0;
+   static uint32_t i = 1;
+    
+   runTimeCounterValue++;
     
    if(i % 500 == 0) {
        HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-#if LOG_BY_RTT
        //LOG_VBS("LED1 toggle...\r\n");
-#endif
    }
    
-#if LOG_BY_RTT
-   if(i % 5000 == 0) {
-       LOG_VBS("\r\n");
-       LOG_VBS("MCU tasks state:\r\n");
+   #if( PRINT_TASK_STATE == 1 )
+   {
+       if(i % 5000 == 0) {
+           printStateFlag = 1;   // can NOT call vTaskList() & vTaskGetRunTimeStats() in vApplicationTickHook() directly!!! Maybe 1ms is NOT enough to execute finished.
+       }
    }
-#endif
+   #endif
    
-   if(++i == 1000000) {
+   if(++i >= 1000000) {
        i = 0;
    }
+}
+
+void vApplicationIdleHook( void )
+{
+    #if( PRINT_TASK_STATE == 1 )
+    {
+        static char stateBuf[256];      // This will ask space at global variable area. Be sure the length is enough!!! 
+        // char stateBuf[256];          // can NOT work! This will occupy the task stack area which has no enough space.
+        
+        if(printStateFlag == 1) {
+            printStateFlag = 0;
+            
+            LOG_VBS("/**************** TASK STATES START ******************/\r\n");
+            // TaskName, RunTimeCounter, UseRate(TotalTime[%d]ms)
+            LOG_VBS("TaskName      RunTimeCnt\tUseRate(TotalTime[%d]ms)\r\n", runTimeCounterValue);
+            vTaskGetRunTimeStats(stateBuf);     // must rewrite getRunTimeCounterValue()
+            LOG_VBS("%s\r\n", stateBuf);
+            
+            // TaskName, TaskState, RestStack, TaskID, 
+            LOG_VBS("TaskName      State    Pri    RestStack TaskID\r\n");
+            vTaskList(stateBuf);
+            LOG_VBS("%s", stateBuf);
+            LOG_VBS("/***************** TASK STATES END *******************/\r\n\r\n");
+        }
+    }
+    #endif
+}
+
+// return runTimeCounterValue in ms
+unsigned long getRunTimeCounterValue(void)
+{
+    return runTimeCounterValue;
+}
+
+void vApplicationMallocFailedHook(void)
+{
+    while(1);
 }
 /* USER CODE END 4 */
 

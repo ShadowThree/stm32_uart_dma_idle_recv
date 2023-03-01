@@ -82,7 +82,7 @@ extern "C" {
   #define LOG_WAR(fmt, ...)         LOG(3, COLOR_YELLOW  "[WAR:%s:%d] " fmt, __FILENAME__, __LINE__, ##__VA_ARGS__)
   #define LOG_INF(fmt, ...)         LOG(4, COLOR_DEFAULT "[INF] "       fmt, ##__VA_ARGS__)
   #define LOG_DBG(fmt, ...)         LOG(5, COLOR_GREEN   "[DBG] "       fmt, ##__VA_ARGS__)
-  #define LOG_VBS(fmt, ...)         LOG(6, COLOR_GRAY    "[VBS] "       fmt, ##__VA_ARGS__)
+  #define LOG_VBS(fmt, ...)         LOG(6, COLOR_GRAY                   fmt, ##__VA_ARGS__)
   
   extern uint8_t logBuf[LOG_BUF_LEN];
   
@@ -105,7 +105,7 @@ extern "C" {
   #define LOG_WAR(fmt, ...)         LOG(3, COLOR_YELLOW  "[WAR:%s:%d] " fmt, __FILENAME__, __LINE__, ##__VA_ARGS__)
   #define LOG_INF(fmt, ...)         LOG(4, COLOR_DEFAULT "[INF] "       fmt, ##__VA_ARGS__)
   #define LOG_DBG(fmt, ...)         LOG(5, COLOR_GREEN   "[DBG] "       fmt, ##__VA_ARGS__)
-  #define LOG_VBS(fmt, ...)         LOG(6, COLOR_GRAY    "[VBS] "       fmt, ##__VA_ARGS__)
+  #define LOG_VBS(fmt, ...)         LOG(6, COLOR_GRAY                   fmt, ##__VA_ARGS__)
   
 #elif !LOG_ENABLE
 

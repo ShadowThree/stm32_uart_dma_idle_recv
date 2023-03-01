@@ -145,10 +145,59 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>d</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>242</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134239738</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\QPCR_APP\../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c\242</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>2187</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134233538</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\QPCR_APP\../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c\2187</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>2191</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134233550</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\QPCR_APP\../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c\2191</Expression>
+        </Bp>
+      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -163,15 +212,10 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>hdma-&gt;XferHalfCpltCallback,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
           <ItemText>hdma-&gt;XferHalfCpltCallback</ItemText>
         </Ww>
         <Ww>
-          <count>4</count>
+          <count>3</count>
           <WinNumber>1</WinNumber>
           <ItemText>hdma-&gt;XferHalfCpltCallback</ItemText>
         </Ww>
@@ -223,7 +267,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
